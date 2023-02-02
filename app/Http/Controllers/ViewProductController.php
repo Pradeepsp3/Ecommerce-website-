@@ -12,9 +12,10 @@ class ViewProductController extends Controller
     //item overview
     public function viewItem($id){
         $item = Item::find($id);
+        $categories= Category::all();
         $category = Category::find($item->category_id);
         $product = Product::find($item->product_id);
-        return view('pages.itemView')->with(['item'=>$item,'category'=>$category,'product'=>$product]);
+        return view('pages.itemView')->with(['item'=>$item,'category'=>$category,'product'=>$product,'categories'=>$categories]);
     }
 
 }

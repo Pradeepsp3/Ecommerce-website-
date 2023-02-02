@@ -1,6 +1,11 @@
 @extends('master')
 @section('title','Login page')
 @section('main-content')
+@if ($message = Session::get('loginfrombuynow'))
+        <div class="alert alert-primary container">
+            {{ $message }}
+        </div>
+    @endif
 <div class="text-center text-primary">
     <h3>LogIn Details</h3>
 </div>

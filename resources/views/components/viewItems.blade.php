@@ -6,7 +6,25 @@
         <h3>Items List</h3>
         <br>
     </div>
-    <div class="col-md-8 container d-flex align-items-center justify-content-center">
+    @if ($message = Session::get('itemUpdated'))
+        <div class="alert alert-success container">
+            {{ $message }}
+        </div>
+    @endif
+    @if ($message = Session::get('itemDeleted'))
+        <div class="alert alert-danger container">
+            {{ $message }}
+        </div>
+    @endif
+    <div class="col-md-8 container">
+        <div class="form float-right d-flex justify-content-center">
+            <form action="{{ url('admin/viewItems') }}" method="GET">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Search Item Name">
+                    <input type="submit" value="search" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
         <table class="table table-bordered text-center align-middle">
             <thead>
                 <th>Id</th>
@@ -14,6 +32,7 @@
                 <th>Category</th>
                 <th>Product</th>
                 <th>Description</th>
+                <th>Quantity</th>
                 <th>Actions</th>
             </thead>
             <tbody>
@@ -32,8 +51,9 @@
                             @endif
                         @endforeach
                         <td>{{ $item->description }}</td>
-                        <td><a href="{{ url('admin/edit/'.$item->id) }}" class="btn btn-warning">Edit</a> <a
-                                href="{{ url('admin/delete/'.$item->id) }}" class="btn btn-danger">Delete</a></td>
+                        <td>{{ $item->quantity }}</td>
+                        <td><a href="{{ url('admin/editItem/'.$item->id) }}" class="btn btn-warning">Edit</a> <a
+                                href="{{ url('admin/deleteItem/'.$item->id) }}" class="btn btn-danger">Delete</a></td>
                     </tr>
                 @endforeach
             </tbody>

@@ -1,12 +1,31 @@
 @extends('master')
 @section('title', 'View Categories')
 @section('main-content')
-<div class="text-center text-primary">
-    <br>
-    <h3>Categories List</h3>
-    <br>
-</div>
-    <div class="col-md-8 container d-flex align-items-center justify-content-center">
+
+    <div class="text-center text-primary">
+        <br>
+        <h3>Categories List</h3>
+        <br>
+    </div>
+    @if ($message = Session::get('categoryUpdated'))
+        <div class="alert alert-success container">
+            {{ $message }}
+        </div>
+    @endif
+    @if ($message = Session::get('categoryDeleted'))
+        <div class="alert alert-danger container">
+            {{ $message }}
+        </div>
+    @endif
+    <div class="col-md-8 container">
+        <div class="form float-right d-flex justify-content-center">
+            <form action="{{ url('admin/viewCategories') }}" method="GET">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control">
+                    <input type="submit" value="search" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
         <table class="table table-bordered text-center align-middle">
             <thead>
                 <th>Id</th>
@@ -18,7 +37,10 @@
                     <tr>
                         <td>{{ $category->id }}</td>
                         <td>{{ $category->category_name }}</td>
-                        <td><a href="{{ url('admin/edit/'.$category->id) }}" class="btn btn-warning">Edit</a> <a href="{{ url('admin/delete/'.$category->id) }}" class="btn btn-danger">Delete</a></td>
+                        <td><a href="{{ url('admin/editCategory/' . $category->id) }}" class="btn btn-warning editCategory"
+                                id="categoryId">Edit</a> <a href="{{ url('admin/deleteCategory/' . $category->id) }}"
+                                class="btn btn-danger">Delete</a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

@@ -6,7 +6,40 @@
         <h3>Products List</h3>
         <br>
     </div>
-    <div class="col-md-8 container d-flex align-items-center justify-content-center">
+    @if ($message = Session::get('productUpdated'))
+    <div class="alert alert-success container">
+        {{ $message }}
+    </div>
+@endif
+    @if ($message = Session::get('productDeleted'))
+        <div class="alert alert-danger container">
+            {{ $message }}
+        </div>
+    @endif
+    <div class="col-md-8 container">
+        <div class="float-right">
+        <div class="form float-right d-flex justify-content-center">
+            <form action="{{ url('admin/viewProducts') }}" method="GET">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Search Product Name">
+                    <input type="submit" value="search" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+        {{-- <div class="form float-right d-flex justify-content-center">
+            <form action="{{ url('admin/viewProducts') }}" method="GET">
+                <div class="input-group">
+                    <select class="form-select" aria-label="Default select example" name="category_id">
+                        <option selected>Open this select menu</option>
+                        @foreach ($categories as $category )
+                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                        @endforeach
+                    </select>
+                    <input type="submit" value="Filter" class="btn btn-primary">
+                </div>
+            </form>
+        </div> --}}
+    </div>
         <table class="table table-bordered text-center align-middle">
             <thead>
                 <th>Id</th>
@@ -19,13 +52,14 @@
                     <tr>
                         <td>{{ $product->id }}</td>
                         <td>{{ $product->product_name }}</td>
-                        @foreach ($categories as $category)
+                        {{-- @foreach ($categories as $category)
                             @if ($category->id === $product->category_id)
                                 <td>{{ $category->category_name }}</td>
                             @endif
-                        @endforeach
-                        <td><a href="{{ url('admin/edit/'.$product->id) }}" class="btn btn-warning">Edit</a> <a
-                                href="{{ url('admin/delete/'.$product->id) }}" class="btn btn-danger">Delete</a></td>
+                        @endforeach --}}
+                        <td>{{ $product->category_name }}</td>
+                        <td><a href="{{ url('admin/editProduct/'.$product->id) }}" class="btn btn-warning">Edit</a> <a
+                                href="{{ url('admin/deleteProduct/'.$product->id) }}" class="btn btn-danger">Delete</a></td>
                     </tr>
                 @endforeach
             </tbody>

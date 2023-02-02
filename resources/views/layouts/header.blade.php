@@ -1,5 +1,6 @@
 <!--Main Navigation-->
 <header>
+    <div style="display: none;">{{ $categories = App\Models\Category::all() }}</div>
     @if (Auth::check())
         @if (auth()->user()->role_as == '1')
             <!-- Sidebar -->
@@ -7,8 +8,8 @@
 
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('admin') }}">
-                    <div class="sidebar-brand-icon rotate-n-15">
-                        <i class="fa fa-home" aria-hidden="true"></i>
+                    <div class="sidebar-brand-icon">
+                        <i class="fa fa-chevron-up" aria-hidden="true"></i>
                     </div>
                     <div class="sidebar-brand-text mx-3">Ecommerce Admin Panel</div>
                 </a>
@@ -59,7 +60,7 @@
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
                         aria-expanded="true" aria-controls="collapseOne">
-                        <i class="fas fa-fw fa-cog"></i>
+                        <i class="fa fa-shopping-basket" aria-hidden="true"></i>
                         <span>Categories</span>
                     </a>
                     <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -74,7 +75,7 @@
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseTwo"
                         aria-expanded="true" aria-controls="collapseTwo">
-                        <i class="fas fa-fw fa-cog"></i>
+                        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                         <span>Products</span>
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -89,7 +90,7 @@
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseThree"
                         aria-expanded="true" aria-controls="collapseThree">
-                        <i class="fas fa-fw fa-cog"></i>
+                        <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
                         <span>Items</span>
                     </a>
                     <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
@@ -146,13 +147,13 @@
                         </button>
 
                         <!-- Topbar Search -->
-                        <form
+                        <form action="{{ url('/') }}"
                             class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                             <div class="input-group">
                                 <input type="text" class="form-control bg-light border-0 small"
                                     placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button">
+                                    <button class="btn btn-primary" type="submit">
                                         <i class="fa fa-search" aria-hidden="true"></i>
                                     </button>
                                 </div>
@@ -201,7 +202,7 @@
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                     aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="{{ url('myProfile/' . auth()->user()->id) }}">
                                         <i class="fa fa-address-card-o" aria-hidden="true"></i>
                                         My Profile
                                     </a>
@@ -212,9 +213,90 @@
                                     </a>
                                 </div>
                             </li>
-
                         </ul>
+                    </nav>
+                @else
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" href="#">Ecommerce</a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page"
+                                            href="{{ url('/') }}">Home</a>
+                                    </li>
+                                    @if (Auth::check())
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                hi {{ auth()->user()->name }}
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a class="dropdown-item text-info"
+                                                        href="{{ url('myProfile/' . auth()->user()->id) }}">My
+                                                        profile</a></li>
+                                                    <li><a class="dropdown-item text-primary" href="{{ url('myOrders/'.auth()->user()->id) }}">My Orders</a>
+                                                    </li>
+                                                <li><a href="{{ url('logout') }}" class="dropdown-item text-danger"
+                                                        style="text-decoration:none;">Logout</a></li>
+                                            </ul>
+                                        </li>
+                                    @else
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Login
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a class="dropdown-item" href="{{ url('login') }}">Log In</a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="{{ url('register') }}">Register
+                                                        New
+                                                        User</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    @endif
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Categories
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            @foreach ($categories as $category)
+                                                <li><a class="dropdown-item"
+                                                        href="#">{{ $category->category_name }}</a></li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item">
+                                        @php
+                                            $carts = App\Models\Cart::all();
+                                            $userId = auth()->user()->id;
+                                            $cartCount = 0;
+                                            foreach ($carts as $cart) {
+                                                if ($userId == $cart->user_id) {
+                                                    $cartCount += 1;
+                                                }
+                                            }
+                                        @endphp
+                                        <a class="nav-link" id="cart"
+                                            href="{{ url('viewCart') }}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart({{ $cartCount }})</a>
+                                    </li>
+                                </ul>
+                                <form class="d-flex">
 
+                                    <input class="form-control me-2" type="search" placeholder="Search"
+                                        aria-label="Search">
+                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                </form>
+                            </div>
+                        </div>
                     </nav>
         @endif
         <!-- End of Topbar -->
@@ -232,9 +314,6 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="{{ url('/') }}">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">About us</a>
-                        </li>
                         @if (Auth::check())
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
@@ -242,7 +321,9 @@
                                     hi {{ auth()->user()->name }}
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="">My profile</a></li>
+                                    <li><a class="dropdown-item"
+                                            href="{{ url('myProfile/' . auth()->user()->id) }}">My
+                                            profile</a></li>
                                     @if (auth()->user()->role_as == '1')
                                         <li><a class="dropdown-item" href="{{ url('admin') }}">Admin
                                                 Panel</a>
@@ -274,25 +355,20 @@
                                 Categories
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                @foreach ($categories as $category)
+                                    <li><a class="dropdown-item" href="#">{{ $category->category_name }}</a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </li>
-                        {{-- <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                  </li> --}}
                         <li class="nav-item">
-                            <a class="nav-link" href="">Cart(0)</a>
+                            <a class="nav-link" id="cart" href="{{ url('viewCart') }}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart(0)</a>
                         </li>
                     </ul>
-                    <form class="d-flex">
-
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    <form action="/" class="d-flex" method="GET">
+                        @csrf
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                        <input class="btn btn-outline-success" type="submit" value="Search">
                     </form>
                 </div>
             </div>

@@ -2,17 +2,22 @@
 @section('title', 'Admin Panel')
 @section('main-content')
 @if ($message = Session::get('categoryadd'))
-    <div class="alert alert-success">
+    <div class="alert alert-success container">
         {{ $message }}
         </div>
 @endif
 @if ($message = Session::get('productadd'))
-    <div class="alert alert-success">
+    <div class="alert alert-success container">
         {{ $message }}
         </div>
 @endif
 @if ($message = Session::get('itemadd'))
-    <div class="alert alert-success">
+    <div class="alert alert-success container">
+        {{ $message }}
+        </div>
+@endif
+@if ($message = Session::get('userAdded'))
+    <div class="alert alert-success container">
         {{ $message }}
         </div>
 @endif

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,7 +12,8 @@ class AuthController extends Controller
 {
     //view login page
     public function loginpage(){
-        return view('auth.login');
+        $categories = Category::all();
+        return view('auth.login')->with(['categories'=>$categories]);
     }
 
     //view admin panel
@@ -40,7 +42,8 @@ class AuthController extends Controller
             if($user->role_as == '1'){
                 return redirect('admin')->with(['user'=>$user]);
             }else{
-            return redirect('/')->with(['user'=>$user]);
+                $categories=Category::all();
+            return redirect('/')->with(['user'=>$user,'categories'=>$categories]);
             }
         }
     }
