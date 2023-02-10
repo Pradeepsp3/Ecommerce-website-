@@ -99,6 +99,7 @@
                             <h6 class="collapse-header">Item list:</h6>
                             <a class="collapse-item" href="{{ url('admin/addItems') }}">Add Items</a>
                             <a class="collapse-item" href="{{ url('admin/viewItems') }}">View Items</a>
+                            <a class="collapse-item" href="{{ url('admin/itemsOnCart') }}">Items on Customers Cart</a>
                         </div>
                     </div>
                 </li>
@@ -216,9 +217,9 @@
                         </ul>
                     </nav>
                 @else
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
                         <div class="container-fluid">
-                            <a class="navbar-brand" href="#">Ecommerce</a>
+                            <a class="navbar-brand" href="#" style="color:aliceblue">Ecommerce</a>
                             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                                 aria-expanded="false" aria-label="Toggle navigation">
@@ -228,22 +229,22 @@
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                     <li class="nav-item">
                                         <a class="nav-link active" aria-current="page"
-                                            href="{{ url('/') }}">Home</a>
+                                            href="{{ url('/') }}" style="color:aliceblue">Home</a>
                                     </li>
                                     @if (Auth::check())
                                         <li class="nav-item dropdown">
                                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:aliceblue">
                                                 hi {{ auth()->user()->name }}
                                             </a>
                                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                                 <li><a class="dropdown-item text-info"
-                                                        href="{{ url('myProfile/' . auth()->user()->id) }}">My
+                                                        href="{{ url('myProfile/' . auth()->user()->id) }}" style="color:aliceblue">My
                                                         profile</a></li>
-                                                    <li><a class="dropdown-item text-primary" href="{{ url('myOrders/'.auth()->user()->id) }}">My Orders</a>
+                                                    <li><a class="dropdown-item text-primary" href="{{ url('myOrders/'.auth()->user()->id) }}" style="color:aliceblue">My Orders</a>
                                                     </li>
                                                 <li><a href="{{ url('logout') }}" class="dropdown-item text-danger"
-                                                        style="text-decoration:none;">Logout</a></li>
+                                                        style="text-decoration:none;" style="color:aliceblue">Logout</a></li>
                                             </ul>
                                         </li>
                                     @else
@@ -253,9 +254,9 @@
                                                 Login
                                             </a>
                                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <li><a class="dropdown-item" href="{{ url('login') }}">Log In</a>
+                                                <li><a class="dropdown-item" href="{{ url('login') }}" style="color:aliceblue">Log In</a>
                                                 </li>
-                                                <li><a class="dropdown-item" href="{{ url('register') }}">Register
+                                                <li><a class="dropdown-item" href="{{ url('register') }}" style="color:aliceblue">Register
                                                         New
                                                         User</a>
                                                 </li>
@@ -264,7 +265,7 @@
                                     @endif
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:aliceblue">
                                             Categories
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -286,14 +287,14 @@
                                             }
                                         @endphp
                                         <a class="nav-link" id="cart"
-                                            href="{{ url('viewCart') }}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart({{ $cartCount }})</a>
+                                            href="{{ url('viewCart') }}" style="color:aliceblue"><i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart({{ $cartCount }})</a>
                                     </li>
                                 </ul>
                                 <form class="d-flex">
 
                                     <input class="form-control me-2" type="search" placeholder="Search"
                                         aria-label="Search">
-                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                    <button class="btn btn-outline-light" type="submit" style="color:aliceblue">Search</button>
                                 </form>
                             </div>
                         </div>
@@ -301,9 +302,9 @@
         @endif
         <!-- End of Topbar -->
     @else
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Ecommerce</a>
+                <a class="navbar-brand text-light" href="#">Ecommerce</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -312,15 +313,15 @@
                 <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ url('/') }}">Home</a>
+                            <a class="nav-link active text-light" aria-current="page" href="{{ url('/') }}">Home</a>
                         </li>
                         @if (Auth::check())
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown"
                                     role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     hi {{ auth()->user()->name }}
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <ul class="dropdown-menu text-light" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item"
                                             href="{{ url('myProfile/' . auth()->user()->id) }}">My
                                             profile</a></li>
@@ -335,7 +336,7 @@
                             </li>
                         @else
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown"
                                     role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Login
                                 </a>
@@ -350,7 +351,7 @@
                             </li>
                         @endif
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 Categories
                             </a>
@@ -362,13 +363,13 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="cart" href="{{ url('viewCart') }}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart(0)</a>
+                            <a class="nav-link text-light" id="cart" href="{{ url('viewCart') }}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart(0)</a>
                         </li>
                     </ul>
                     <form action="/" class="d-flex" method="GET">
                         @csrf
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
-                        <input class="btn btn-outline-success" type="submit" value="Search">
+                        <input class="btn btn-outline-light text-light" type="submit" value="Search">
                     </form>
                 </div>
             </div>

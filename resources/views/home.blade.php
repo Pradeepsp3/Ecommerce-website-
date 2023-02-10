@@ -4,16 +4,19 @@
     @if ($message = Session::get('adminerror'))
         <div class="alert alert-danger container">
             {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     @if ($message = Session::get('orderAddedError'))
         <div class="alert alert-danger container">
             {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     @if ($message = Session::get('orderAdded'))
         <div class="alert alert-success container">
             {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     {{-- item card --}}

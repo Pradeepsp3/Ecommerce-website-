@@ -4,6 +4,7 @@
 @if ($message = Session::get('loginfrombuynow'))
         <div class="alert alert-primary container">
             {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 <div class="text-center text-primary">

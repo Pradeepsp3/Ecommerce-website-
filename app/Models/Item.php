@@ -9,8 +9,8 @@ class Item extends Model
 {
     use HasFactory;
 
-    public function products()
+    public function categories()
     {
-        return $this->hasOne(Product::class);
+        return $this->belongsTo(Category::class);
     }
 }

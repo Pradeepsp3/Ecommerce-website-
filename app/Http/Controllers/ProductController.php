@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Cart;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\ProductController;
-use Illuminate\Support\Facades\Hash;
 
 class ProductController extends Controller
 {
@@ -262,10 +263,13 @@ class ProductController extends Controller
         $order->order_status = $request->orderStatus;
         if($order->order_status == "Delivered"){
             $order->expected_delivery = Carbon::now()->tz('Asia/Kolkata')->toRfc850String();
-        }
+            $order->save();
+        return redirect()->back()->with(['orderUpdated'=>"Order On: $order->invoice_no is Updated."]);
+        }else{
         $order->updated_at = Carbon::now()->tz('Asia/Kolkata')->toRfc850String();
         $order->save();
         return redirect()->back()->with(['orderUpdated'=>"Order On: $order->invoice_no is Updated."]);
+    }
     }
 
     //view completed Orders Page
@@ -374,6 +378,44 @@ class ProductController extends Controller
         $user = User::find($id);
         $user->delete();
         return redirect('admin/viewUsers')->with(['userDeleted'=>"User $user->name Deleted Successfully!!!"]);
+    }
+
+    //items on customer cart
+    public function itemsOnCart(Request $request){
+        $search = $request->input('search') ?? "";
+        $carts = Cart::all();
+        foreach($carts as $cart){
+            $itemOnCart = Item::find($cart->item_id);
+            if($search != ""){
+                $items = Item::where('item_name','LIKE',"%$search%")->get();
+                foreach($items as $item){
+                if($item->item_name == $itemOnCart->item_name){
+                    $cart['item_name'] = $item->item_name;
+                    $cart['description'] = $item->description;
+                }
+            }
+            }else{
+                $cart['item_name'] = $itemOnCart->item_name;
+                $cart['description'] = $itemOnCart->description;
+            }
+
+
+
+            $customer = User::find($cart->user_id);
+            $cart['customer_name'] = $customer->name;
+        }
+        return view('components.itemsOnCart')->with(['carts'=>$carts]);
+    }
+
+    //move items from cart to stock
+    public function moveToStock($id){
+        $cart = Cart::find($id);
+        $item = Item::find($cart->item_id);
+        $item->quantity = $item->quantity + $cart->quantity;
+        $item->save();
+        $cart->delete();
+        // return dd($cartItem->id);
+        return back()->with(['movedToStock'=>"Item: $item->item_name with quantity: $cart->quantity Moved Successfully"]);
     }
 
 }

@@ -9,6 +9,7 @@
     @if ($message = Session::get('orderUpdated'))
         <div class="alert alert-success container">
             {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     <div class="col-md-10 container d-flex align-items-center justify-content-center">
@@ -44,28 +45,30 @@
                                             <option value="Pending" class="text-danger">Pending</option>
                                         @endif
                                         @if ($order->order_status == 'Confirmed')
-                                            <option value="Pending" class="text-danger" selected>Confirmed</option>
+                                            <option value="Confirmed" class="text-danger" selected>Confirmed</option>
                                         @else
-                                            <option value="Pending" class="text-danger">Confirmed</option>
+                                            <option value="Confirmed" class="text-danger">Confirmed</option>
                                         @endif
                                         @if ($order->order_status == 'Processing')
-                                            <option value="Pending" class="text-danger" selected>Processing</option>
+                                            <option value="Processing" class="text-danger" selected>Processing</option>
                                         @else
                                             <option value="Processing" class="text-info">Processing</option>
                                         @endif
                                         @if ($order->order_status == 'Shipped')
-                                            <option value="Pending" class="text-danger" selected>Shipped</option>
+                                            <option value="Shipped" class="text-danger" selected>Shipped</option>
                                         @else
                                             <option value="Shipped" class="text-info">Shipped</option>
                                         @endif
                                         @if ($order->order_status == 'Delivered')
-                                            <option value="Pending" class="text-danger" selected>Delivered</option>
+                                            <option value="Delivered" class="text-danger" selected>Delivered</option>
                                         @else
                                             <option value="Delivered" class="text-success">Delivered</option>
                                         @endif
                                     </select></th>
                                 <th>{{ $order->expected_delivery }}</th>
-                                <th><input type="submit" class="btn btn-primary" value="Update"> <a href="{{ url('admin/viewOrderDetails/'.$order->id) }}" class="btn btn-info">View</a></th>
+                                <th><input type="submit" class="btn btn-primary" value="Update"> <a
+                                        href="{{ url('admin/viewOrderDetails/' . $order->id) }}" class="btn btn-info">View</a>
+                                </th>
                             </tr>
                         </form>
                     @endif
@@ -74,3 +77,4 @@
         </table>
     </div>
 @endsection
+

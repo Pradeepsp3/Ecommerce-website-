@@ -5,6 +5,7 @@
 @if ($message = Session::get('profileupdated'))
         <div class="alert alert-success">
             {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     <div class="container rounded bg-white mt-5 mb-5">

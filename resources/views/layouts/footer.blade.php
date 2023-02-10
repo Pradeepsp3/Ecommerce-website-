@@ -12,10 +12,14 @@
   </footer> --}}
   <footer class="container-fluid bg-light text-center text-lg-start" style="bottom:0px;position:fixed;width:100%">
     <!-- Copyright -->
-    <div class="text-center p-2" style="background-color: #dad4d8">
+    <div class=" p-2 d-flex" style="background-color: #dad4d8">
+    <div class="mx-auto">
       © 2023 Copyright
-      <span style="">Made with <span style="color:darkgray">&hearts;</span> by&nbsp;&nbsp;<span id="footerName">Pradeep Prasanna</span></span>
     </div>
+    <div style="margin-left:-20%;padding-right:20%">
+      Made with <span id="heart">&hearts;</span> by&nbsp;&nbsp;<span id="footerName">Pradeep Prasanna</span>
+    </div>
+</div>
 
 
   </footer>

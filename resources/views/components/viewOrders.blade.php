@@ -6,7 +6,7 @@
         <h3>Orders List</h3>
         <br>
     </div>
-    <div class="col-md-12 container d-flex align-items-center justify-content-center">
+    <div class="col-md-10 container d-flex align-items-center justify-content-center">
         <table class="table table-bordered text-center align-middle">
             <thead>
                 <th>Invoice</th>
@@ -21,6 +21,7 @@
             </thead>
             <tbody>
                 @foreach ($orders as $order)
+                @if ($order->order_status != "Delivered")
                     <tr>
                         <th>{{ $order->invoice_no }}</th>
                         <th>{{ $order->user_id }}</th>
@@ -32,6 +33,7 @@
                         <th>{{ $order->expected_delivery }}</th>
                         <th><a href="{{ url('admin/viewOrderDetails/'.$order->id) }}" class="btn btn-info">View</a> <a href="{{ url('admin/ordersInProgress') }}" class="btn btn-warning">Edit</a></th>
                     </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>

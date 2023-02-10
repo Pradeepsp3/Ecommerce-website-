@@ -49,6 +49,11 @@ Route::get('/', function (Request $request) {
     return view('home')->with(['products' => $products, 'categories' => $categories, 'items' => $items]);
 });
 
+// home redirect
+Route::get('home',function(){
+    return redirect('/');
+});
+
 //auth controls
 Route::get('login', [AuthController::class, 'loginpage']);
 Route::get('loginAttempt', [AuthController::class, 'loginAttempt']);
@@ -87,6 +92,8 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/deleteItem', [ProductController::class, 'deleteItem']);
     Route::get('/deleteProduct', [ProductController::class, 'deleteProduct']);
     Route::get('/deleteCategory', [ProductController::class, 'deleteCategory']);
+    Route::get('/itemsOnCart', [ProductController::class, 'itemsOnCart']);
+    Route::get('/moveToStock/{id}',[ProductController::class, 'moveToStock']);
 });
 
 //order
@@ -104,6 +111,9 @@ Route::get('addToCart/{id}', [BuyProductController::class, 'addToCart']);
 Route::get('subtractFromCart/{id}', [BuyProductController::class, 'subtractFromCart']);
 Route::get('removeFromCart/{id}', [BuyProductController::class, 'removeFromCart']);
 Route::get('checkout/{id}', [BuyProductController::class, 'viewCheckout']);
+Route::get('viewInvoice/{id}', [BuyProductController::class, 'viewInvoice']);
+
+
 
 
 // my profile
@@ -141,5 +151,7 @@ Route::patch('updateProfile/{id}', function (Request $request, $id) {
 
 Route::get('test', function () {
 
-    return dd(Auth::user()->id);
+    $item = Item::find(2);
+
+    return dd($item->Category->category_name);
 });

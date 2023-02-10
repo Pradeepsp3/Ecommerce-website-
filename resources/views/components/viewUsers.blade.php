@@ -9,6 +9,7 @@
     @if ($message = Session::get('userDeleted'))
         <div class="alert alert-danger container">
             {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     <div class="col-md-10 container">

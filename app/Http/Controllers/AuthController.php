@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,8 +19,29 @@ class AuthController extends Controller
     }
 
     //view admin panel
-    public function adminPanel(){ 
-            return view('admin');
+    public function adminPanel(){
+        $items = Item::all();
+        $users = User::all();
+        $orders = Order::all();
+        $orderInProgress = 0;
+        $deliveredOrders = 0;
+        $totalItemsInStock = 0;
+        foreach($orders as $order){
+            if($order->order_status != "Delivered"){
+                $orderInProgress += 1;
+            }else{
+                $deliveredOrders += 1;
+            }
+        }
+        foreach($items as $item){
+            $totalItemsInStock += $item->quantity;
+        }
+        // foreach($users as $user){
+
+        // }
+        // return dd($orderInProgress);
+
+            return view('admin',compact('items','users','orders','orderInProgress','deliveredOrders','totalItemsInStock'));
     }
 
     //view register page

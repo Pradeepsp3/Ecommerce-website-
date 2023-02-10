@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('invoice_no');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('cart_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('item_id')->constrained()->cascadeOnDelete();
             $table->string('item_name');
             $table->string('quantity');
             $table->string('delivery_address');

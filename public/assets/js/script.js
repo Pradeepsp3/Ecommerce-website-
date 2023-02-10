@@ -35,6 +35,19 @@ document.getElementById('quantityUp').addEventListener('click', function (){
 });
 
 
+// // download invoice
+function exportPDF(invoiceNo){
+    invoiceNo = JSON.stringify(invoiceNo);
+    console.log(invoiceNo);
+    var options = {
+  };
+  var pdf = new jsPDF('l', 'pt', 'a5');
+  pdf.addHTML($("#printInvoice"), 15, 15, options, function() {
+    pdf.save(`Invoice${invoiceNo}.pdf`);
+  });
+}
+
+
 
 
 

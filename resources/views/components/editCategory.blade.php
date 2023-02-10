@@ -21,6 +21,7 @@
         </div>
         <div class="text-center">
             <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+            <a href="{{ url('admin/viewCategories') }}" class="btn btn-info">Back</a>
         </div>
     </form>
 </div>

@@ -9,11 +9,13 @@
     @if ($message = Session::get('itemUpdated'))
         <div class="alert alert-success container">
             {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     @if ($message = Session::get('itemDeleted'))
         <div class="alert alert-danger container">
             {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     <div class="col-md-8 container">
