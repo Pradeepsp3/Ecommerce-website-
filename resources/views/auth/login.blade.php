@@ -7,6 +7,12 @@
             <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+    @if ($message = Session::get('loginError'))
+        <div class="alert alert-danger container">
+            {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 <div class="text-center text-primary">
     <h3>LogIn Details</h3>
 </div>
@@ -17,14 +23,14 @@
                 <label for="email">Email:</label>
                 <input type="text" name="email" class="form-control">
                 @error('email')
-                    <div class="error">{{ '*' . $message }}</div>
+                    <div class="error text-danger" style="font-size:14px;">{{ '*' . $message }}</div>
                 @enderror
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" name="password" class="form-control">
                 @error('password')
-                    <div class="error">{{ '*' . $message }}</div>
+                    <div class="error text-danger" style="font-size:14px;">{{ '*' . $message }}</div>
                 @enderror
             </div>
             <br>

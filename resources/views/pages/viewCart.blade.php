@@ -94,48 +94,6 @@
                             </div>
                         @endforeach
                     </div>
-                    {{-- <div class="card mb-4">
-                        <div class="card-body">
-                            <form class="p-2 d-flex justify-content-center align-items-center col-md-12">
-                                @csrf
-                                <div class="d-flex flex-row pb-3 col-md-4">
-                                    <div class="d-flex align-items-center pe-2">
-                                        <input class="form-check-input" type="radio" name="paymentMode" id="cardPayment"
-                                            value="CardPayment" aria-label="..." disabled />
-                                    </div>
-                                    <div class="rounded border d-flex w-100 p-3 align-items-center">
-                                        <p class="mb-0 text-dark">
-                                            <i class="fa fa-credit-card-alt" aria-hidden="true"></i> Credit/Debit Card
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="d-flex flex-row pb-3 col-md-4">
-                                    <div class="d-flex align-items-center pe-2">
-                                        <input class="form-check-input" type="radio" name="paymentMode" id="upi"
-                                            value="UPI" aria-label="..." disabled />
-                                    </div>
-                                    <div class="rounded border d-flex w-100 p-3 align-items-center">
-                                        <p class="mb-0 text-dark">
-                                            <i class="fab fa-cc-mastercard fa-lg text-dark pe-2"></i> UPI
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="d-flex flex-row pb-3 col-md-4">
-                                    <div class="d-flex align-items-center pe-2">
-                                        <input class="form-check-input" type="radio" name="paymentMode" id="cod"
-                                            value="COD" aria-label="..." checked />
-                                    </div>
-                                    <div class="rounded border d-flex w-100 p-3 align-items-center">
-                                        <p class="mb-0 text-dark">
-                                            <i class="fa fa-money" aria-hidden="true"></i> Cash on Delivery
-                                        </p>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div> --}}
                     <div class="card mb-4 d-flex">
                         <div class="card-body">
                             <p><strong>Ordered On</strong></p>
@@ -176,9 +134,13 @@
                                     <span><strong>{{ $total += $shipping }}</strong></span>
                                 </li>
                             </ul>
-
+                            @if (Auth::check())
                             <a href="{{ url('checkout/' . auth()->user()->id) }}"
                                 class="btn btn-primary btn-lg btn-block">Proceed to Checkout</a>
+                            @else
+                            <a href=""
+                                class="btn btn-primary btn-lg btn-block">Proceed to Checkout</a>
+                            @endif
 
                         </div>
                     </div>

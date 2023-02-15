@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\Order;
@@ -13,27 +14,29 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     //view login page
-    public function loginpage(){
+    public function loginpage()
+    {
         $categories = Category::all();
-        return view('auth.login')->with(['categories'=>$categories]);
+        return view('auth.login')->with(['categories' => $categories]);
     }
 
     //view admin panel
-    public function adminPanel(){
+    public function adminPanel()
+    {
         $items = Item::all();
         $users = User::all();
         $orders = Order::all();
         $orderInProgress = 0;
         $deliveredOrders = 0;
         $totalItemsInStock = 0;
-        foreach($orders as $order){
-            if($order->order_status != "Delivered"){
+        foreach ($orders as $order) {
+            if ($order->order_status != "Delivered") {
                 $orderInProgress += 1;
-            }else{
+            } else {
                 $deliveredOrders += 1;
             }
         }
-        foreach($items as $item){
+        foreach ($items as $item) {
             $totalItemsInStock += $item->quantity;
         }
         // foreach($users as $user){
@@ -41,33 +44,83 @@ class AuthController extends Controller
         // }
         // return dd($orderInProgress);
 
-            return view('admin',compact('items','users','orders','orderInProgress','deliveredOrders','totalItemsInStock'));
+        return view('admin', compact('items', 'users', 'orders', 'orderInProgress', 'deliveredOrders', 'totalItemsInStock'));
     }
 
     //view register page
-    public function registerpage(){
+    public function registerpage()
+    {
         return view('auth.register');
     }
 
     //login user
-    public function loginAttempt(Request $request){
+    public function loginAttempt(Request $request)
+    {
         $request->validate([
-            'email'=>'required|email',
-            'password'=>'required'
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
 
         $email = $request->input('email');
         $password = $request->input('password');
 
-        if(Auth::attempt(['email' => $email, 'password' => $password])){
-            $user = User::where('email',$email)->first();
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
+
+            $user = User::where('email', $email)->first();
+
             Auth::login($user);
-            if($user->role_as == '1'){
-                return redirect('admin')->with(['user'=>$user]);
-            }else{
-                $categories=Category::all();
-            return redirect('/')->with(['user'=>$user,'categories'=>$categories]);
+
+            if ($user->role_as == '1') {
+                return redirect('admin')->with(['user' => $user]);
+            } else {
+                if (session()->get('cart_items') == null) {
+                    return redirect('/')->with(['user' => $user]);
+                } else {
+                    // return dd(session()->get('cart_items'));
+                    $sessionCarts = session()->get('cart_items');
+                    $userId = Auth()->user()->id;
+                    $cartItems = Cart::where('user_id', '=', $userId)->get();
+                    $cartCount = $cartItems->count();
+                    foreach ($sessionCarts as $sessionCart) {
+                        // return dd($sessionCart['item_id']);
+                        if ($cartCount == 0) {
+                            // return dd($cartItems);
+                            $cart = new Cart();
+                            $cart->item_id = $sessionCart['item_id'];
+                            $cart->user_id = $userId;
+                            $cart->quantity = "1";
+                            $item = Item::find($sessionCart['item_id']);
+                            $item->quantity = $item->quantity - $cart->quantity;
+                            $item->save();
+                            $cart->save();
+                        } else {
+                            foreach ($cartItems as $cartItem) {
+                                if ($cartItem->item_id == $sessionCart['item_id']) {
+                                    $cartItem->quantity = $cartItem->quantity + $sessionCart['quantity'];
+                                    $item = Item::find($cartItem->item_id);
+                                    $item->quantity = $item->quantity - $sessionCart['quantity'];
+                                    $item->save();
+                                    $cartItem->save();
+                                } else {
+                                    $cart = new Cart();
+                                    $cart->item_id = $sessionCart['item_id'];
+                                    $cart->user_id = $userId;
+                                    $cart->quantity = $sessionCart['quantity'];
+                                    $item = Item::find($sessionCart['item_id']);
+                                    $item->quantity = $item->quantity - $sessionCart['quantity'];
+                                    $item->save();
+                                    $cart->save();
+                                }
+                            }
+                        }
+                    }
+                    session()->forget('cart_items');
+                    session()->save();
+                }
+                return redirect('/')->with(['user' => $user]);
             }
+        }else{
+            return redirect()->back()->with(['loginError'=>"Kindly Enter the Valid Details..."]);
         }
     }
 
@@ -91,13 +144,13 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/')->with(['user'=>$user]);
+        return redirect('/')->with(['user' => $user]);
+    }
 
-        }
-
-        // Logout user
-        public function logout(){
-            Auth::logout();
-            return redirect('/');
-        }
+    // Logout user
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/');
+    }
 }

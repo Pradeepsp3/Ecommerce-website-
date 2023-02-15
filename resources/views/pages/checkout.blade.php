@@ -158,7 +158,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -167,8 +166,6 @@
                                     style="background-color:#60bdf3 ;" value="Place Order">
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>

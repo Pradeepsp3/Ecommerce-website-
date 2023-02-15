@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Card;
 use App\Models\Cart;
 use App\Models\Item;
 use App\Models\User;
@@ -37,8 +38,9 @@ Route::get('/', function (Request $request) {
     $search = $request->input('search') ?? "";
     // return dd($search);
     if ($search != "") {
-        // $items = $items->where('product_name','LIKE',"%$search%");
-        $items = collect($items)->where('category_name','LIKE',$search);
+        $items = Item::where('item_name','LIKE',"%$search%");
+        // return dd($items);
+        // $items = collect($items)->where('item_name','LIKE',$search);
         // return dd($items);
     } else {
         $items = Item::all();
@@ -46,6 +48,14 @@ Route::get('/', function (Request $request) {
         $products = Product::all();
     $categories = Category::all();
 
+    return view('home')->with(['products' => $products, 'categories' => $categories, 'items' => $items]);
+});
+
+// category select
+Route::get('category/{id}',function($id){
+    $items = Item::where('category_id','=',$id)->get();
+    $products = Product::all();
+    $categories = Category::all();
     return view('home')->with(['products' => $products, 'categories' => $categories, 'items' => $items]);
 });
 
@@ -99,6 +109,8 @@ Route::middleware('admin')->prefix('admin')->group(function () {
 //order
 Route::post('placeOrder', [OrderController::class, 'placeOrder']);
 Route::get('myOrders/{id}', [OrderController::class, 'viewOrders']);
+Route::get('addCard/{id}',[OrderController::class, 'addCard']);
+Route::post('storeCardDetails',[OrderController::class, 'storeCardDetails']);
 
 //items
 Route::get('viewItem/{id}', [ViewProductController::class, 'viewItem']);
@@ -121,7 +133,8 @@ Route::get('myProfile/{id}', function ($id) {
 
     $user = User::find($id);
     $categories = Category::all();
-    return view('pages.myProfile')->with(['categories' => $categories, 'user' => $user]);
+    $cards = Card::where('user_id','=',$user->id)->get();
+    return view('pages.myProfile')->with(['categories' => $categories, 'user' => $user,'cards' => $cards]);
     // return dd($user);
 });
 
@@ -152,6 +165,8 @@ Route::patch('updateProfile/{id}', function (Request $request, $id) {
 Route::get('test', function () {
 
     $item = Item::find(2);
-
-    return dd($item->Category->category_name);
+    // session()->flush();
+    // session()->save();
+    // return dd(session()->get('cart_items'));
+    return dd($item);
 });

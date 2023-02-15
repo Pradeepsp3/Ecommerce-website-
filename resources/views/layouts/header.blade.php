@@ -216,89 +216,100 @@
                             </li>
                         </ul>
                     </nav>
-                @else
-                    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-                        <div class="container-fluid">
-                            <a class="navbar-brand" href="#" style="color:aliceblue">Ecommerce</a>
-                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
-                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" aria-current="page"
-                                            href="{{ url('/') }}" style="color:aliceblue">Home</a>
-                                    </li>
-                                    @if (Auth::check())
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                                role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:aliceblue">
-                                                hi {{ auth()->user()->name }}
-                                            </a>
-                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <li><a class="dropdown-item text-info"
-                                                        href="{{ url('myProfile/' . auth()->user()->id) }}" style="color:aliceblue">My
-                                                        profile</a></li>
-                                                    <li><a class="dropdown-item text-primary" href="{{ url('myOrders/'.auth()->user()->id) }}" style="color:aliceblue">My Orders</a>
-                                                    </li>
-                                                <li><a href="{{ url('logout') }}" class="dropdown-item text-danger"
-                                                        style="text-decoration:none;" style="color:aliceblue">Logout</a></li>
-                                            </ul>
+                </div>
+            </div>
+        @else
+            <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#" style="color:aliceblue">Ecommerce</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{{ url('/') }}"
+                                    style="color:aliceblue">Home</a>
+                            </li>
+                            @if (Auth::check())
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                        role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                        style="color:aliceblue">
+                                        hi {{ auth()->user()->name }}
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item text-info"
+                                                href="{{ url('myProfile/' . auth()->user()->id) }}"
+                                                style="color:aliceblue">My
+                                                profile</a></li>
+                                        <li><a class="dropdown-item text-primary"
+                                                href="{{ url('myOrders/' . auth()->user()->id) }}"
+                                                style="color:aliceblue">My Orders</a>
                                         </li>
-                                    @else
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Login
-                                            </a>
-                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <li><a class="dropdown-item" href="{{ url('login') }}" style="color:aliceblue">Log In</a>
-                                                </li>
-                                                <li><a class="dropdown-item" href="{{ url('register') }}" style="color:aliceblue">Register
-                                                        New
-                                                        User</a>
-                                                </li>
-                                            </ul>
+                                        <li><a href="{{ url('logout') }}" class="dropdown-item text-danger"
+                                                style="text-decoration:none;" style="color:aliceblue">Logout</a></li>
+                                    </ul>
+                                </li>
+                            @else
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Login
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="{{ url('login') }}"
+                                                style="color:aliceblue">Log In</a>
                                         </li>
-                                    @endif
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                            role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:aliceblue">
-                                            Categories
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            @foreach ($categories as $category)
-                                                <li><a class="dropdown-item"
-                                                        href="#">{{ $category->category_name }}</a></li>
-                                            @endforeach
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        @php
-                                            $carts = App\Models\Cart::all();
-                                            $userId = auth()->user()->id;
-                                            $cartCount = 0;
-                                            foreach ($carts as $cart) {
-                                                if ($userId == $cart->user_id) {
-                                                    $cartCount += 1;
-                                                }
-                                            }
-                                        @endphp
-                                        <a class="nav-link" id="cart"
-                                            href="{{ url('viewCart') }}" style="color:aliceblue"><i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart({{ $cartCount }})</a>
-                                    </li>
+                                        <li><a class="dropdown-item" href="{{ url('register') }}"
+                                                style="color:aliceblue">Register
+                                                New
+                                                User</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endif
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                    style="color:aliceblue">
+                                    Categories
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @foreach ($categories as $category)
+                                        <li><a class="dropdown-item"
+                                                href="{{ url('category/'.$category->id) }}">{{ $category->category_name }}</a></li>
+                                    @endforeach
                                 </ul>
-                                <form class="d-flex">
+                            </li>
+                            <li class="nav-item">
+                                @php
+                                    $carts = App\Models\Cart::all();
+                                    $userId = auth()->user()->id;
+                                    $cartCount = 0;
+                                    foreach ($carts as $cart) {
+                                        if ($userId == $cart->user_id) {
+                                            $cartCount += 1;
+                                        }
+                                    }
+                                @endphp
+                                <a class="nav-link" id="cart" href="{{ url('viewCart') }}"
+                                    style="color:aliceblue"><i class="fa fa-shopping-cart"
+                                        aria-hidden="true"></i>Cart({{ $cartCount }})</a>
+                            </li>
+                        </ul>
+                        <form class="d-flex">
 
-                                    <input class="form-control me-2" type="search" placeholder="Search"
-                                        aria-label="Search">
-                                    <button class="btn btn-outline-light" type="submit" style="color:aliceblue">Search</button>
-                                </form>
-                            </div>
-                        </div>
-                    </nav>
+                            <input class="form-control me-2" type="search" placeholder="Search"
+                                aria-label="Search">
+                            <button class="btn btn-outline-light" type="submit"
+                                style="color:aliceblue">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
         @endif
         <!-- End of Topbar -->
     @else
@@ -313,7 +324,8 @@
                 <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active text-light" aria-current="page" href="{{ url('/') }}">Home</a>
+                            <a class="nav-link active text-light" aria-current="page"
+                                href="{{ url('/') }}">Home</a>
                         </li>
                         @if (Auth::check())
                             <li class="nav-item dropdown">
@@ -351,24 +363,38 @@
                             </li>
                         @endif
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Categories
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @foreach ($categories as $category)
-                                    <li><a class="dropdown-item" href="#">{{ $category->category_name }}</a>
+                                    <li><a class="dropdown-item" href="{{ url('category/'.$category->id) }}">{{ $category->category_name }}</a>
                                     </li>
                                 @endforeach
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" id="cart" href="{{ url('viewCart') }}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart(0)</a>
-                        </li>
+                        @if (Session::has('cart_items'))
+                            <li class="nav-item">
+                                <a class="nav-link text-light" id="cart" href="{{ url('viewCart') }}"><i
+                                        class="fa fa-shopping-cart"
+                                        aria-hidden="true"></i>Cart({{ count(session('cart_items')) }})</a>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a class="nav-link text-light" id="cart" href="{{ url('viewCart') }}"><i
+                                        class="fa fa-shopping-cart" aria-hidden="true"></i>Cart(<span
+                                        id="cart">0</span>)</a>
+                            </li>
+                        @endif
+                        {{-- <li class="nav-item">
+                            <a class="nav-link text-light" id="cart" href="{{ url('viewCart') }}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart(<span id="cart">0</span>)</a>
+                        </li> --}}
                     </ul>
                     <form action="/" class="d-flex" method="GET">
                         @csrf
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                            name="search">
                         <input class="btn btn-outline-light text-light" type="submit" value="Search">
                     </form>
                 </div>

@@ -48,6 +48,29 @@ function exportPDF(invoiceNo){
 }
 
 
+//view Debit Card Details
+function debitCardView(){
+    document.getElementById('debitView').style.display = 'block';
+    document.getElementById('creditView').style.display = 'none';
+}
+
+//view Credit Card Details
+function creditCardView(){
+    document.getElementById('creditView').style.display = 'block';
+    document.getElementById('debitView').style.display = 'none';
+}
+
+//view cards selection section on checkout page
+function viewCardsAdded(){
+    document.getElementById('viewCardsAdded').style.display = 'block';
+
+}
 
 
-
+// //add items to sessions
+// function addItemToSession(id){
+//     var itemIds = [];
+//     itemIds.push(id);
+//     document.getElementById('cart').innerHTML += 1;
+//     console.log(itemIds);
+// }

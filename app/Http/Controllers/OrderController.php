@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Card;
 use App\Models\Cart;
 use App\Models\Item;
 use App\Models\Order;
@@ -16,6 +17,8 @@ class OrderController extends Controller
     // place order
     public function placeOrder(Request $request)
     {
+
+        if($request->payment_mode == "COD"){
         // return dd();
         $userId = auth()->user()->id;
         $cartItems = Cart::all();
@@ -71,7 +74,12 @@ class OrderController extends Controller
         }
         return redirect('/')->with(['orderAdded' => "Thank you for Your Order! Order Added Successfully"]);
         // return dd($userId);
+    }elseif($request->payment_mode == "CardPayment"){
 
+        return dd(null);
+        return redirect('addCard');
+
+    }
     }
 
 
@@ -90,5 +98,32 @@ class OrderController extends Controller
         $shipping = 150;
         return view('pages.listOrders')->with(['orders' => $orders, 'total' => $total, 'shipping' => $shipping]);
         // return dd($orders);
+    }
+
+    //Add cards for payment
+    public function addCard($id){
+
+        return view('pages.addCard');
+    }
+
+    //Store Card Details
+    public function storeCardDetails(Request $request){
+        $user = Auth::user();
+        $request->validate([
+            'cardType' => 'required',
+            'cardName' => 'required',
+            'cardNumber' => 'required',
+            'expiresAt' => 'required',
+        ]);
+
+        $card = new Card();
+        $card->user_id = $user->id;
+        $card->name_on_card = $request->cardName;
+        $card->card_no = $request->cardNumber;
+        $card->card_type = $request->cardType;
+        $card->expires_at = $request->expiresAt;
+        $card->save();
+
+        return redirect('myProfile/'.$user->id)->with(['cardAdded' =>"Your $card->card_type Card Added Successfully..."]);
     }
 }

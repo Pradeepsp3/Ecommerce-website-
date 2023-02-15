@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
+use App\Models\Card;
 use App\Models\Cart;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\Order;
+// use Barryvdh\DomPDF\PDF;
 use App\Models\Product;
 use App\Models\Category;
-// use Barryvdh\DomPDF\PDF;
-use Illuminate\Http\Request;
-use PDF;
 // use Illuminate\Support\Facades\File;
 // use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Session;
+
+
+
 
 class BuyProductController extends Controller
 {
@@ -96,7 +101,32 @@ class BuyProductController extends Controller
                 return redirect()->back();
             }
         } else {
-            return redirect('login')->with(['loginfrombuynow' => "Kindly Login Before Continue"]);
+            $cart_items = session()->get('item_ids');
+            $item = Item::find($id);
+            if (isset($cart_items[$id])) {
+                $cart_items = [
+                        'item_id' => $item->id,
+                        'item_name' => $item->item_name,
+                        'price' => $item->price,
+                        'description' => $item->description,
+                        'quantity' => $cart_items->quantity + 1,
+                ];
+                session()->put('cart_items', $cart_items);
+            // return dd($cart_items);
+            return redirect()->back()->with(['cartAdded' => "Item Added in Cart Successfully..."]);
+            }else{
+                $cart_items = [
+                        'item_id' => $item->id,
+                        'item_name' => $item->item_name,
+                        'price' => $item->price,
+                        'description' => $item->description,
+                        'quantity' => 1,
+                ];
+                session()->push('cart_items', $cart_items);
+                // return dd($cart_items);
+                return redirect()->back()->with(['cartAdded' => "Item Added in Cart Successfully..."]);
+            }
+
         }
     }
 
@@ -162,6 +192,7 @@ class BuyProductController extends Controller
             $shipping = 150;
             $shipping *= $cartCount;
             return view('pages.viewCart')->with(['categories' => $categories, 'items' => $items, 'total' => $total, 'shipping' => $shipping, 'cartCount' => $cartCount]);
+
         } else {
             return redirect('login')->with(['loginfrombuynow' => "Kindly Login Before Continue"]);
         }
@@ -219,7 +250,8 @@ class BuyProductController extends Controller
                 // return dd($items);
                 $shipping = 150;
                 $shipping *= $cartCount;
-                return view('pages.checkout')->with(['invoiceNo' => $invoiceNo, 'items' => $items, 'total' => $total, 'shipping' => $shipping, 'cartCount' => $cartCount, 'user' => $user]);
+                $cards = Card::where('user_id', '=', $user->id)->get();
+                return view('pages.checkout')->with(['invoiceNo' => $invoiceNo, 'items' => $items, 'total' => $total, 'shipping' => $shipping, 'cartCount' => $cartCount, 'user' => $user, 'cards' => $cards]);
             }
         } else {
             return redirect('login')->with(['loginfrombuynow' => "Kindly Login Before Continue"]);

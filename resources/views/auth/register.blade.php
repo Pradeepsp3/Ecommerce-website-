@@ -12,7 +12,7 @@
                 <input type="text" name="name" class="form-control">
 
                 @error('name')
-                    <div class="error">{{ '*' . $message }}</div>
+                    <div class="error" style="font-size:14px;">{{ '*' . $message }}</div>
                 @enderror
             </div>
             <div class="form-group">
@@ -20,7 +20,7 @@
                 <input type="text" name="email" class="form-control">
 
                 @error('email')
-                    <div class="error">{{ '*' . $message }}</div>
+                    <div class="error" style="font-size:14px;">{{ '*' . $message }}</div>
                 @enderror
             </div>
             <div class="form-group">
@@ -28,7 +28,7 @@
                 <input type="password" name="password" class="form-control">
 
                 @error('password')
-                    <div class="error">{{ '*' . $message }}</div>
+                    <div class="error" style="font-size:14px;">{{ '*' . $message }}</div>
                 @enderror
             </div>
             <div class="form-group">
@@ -36,7 +36,7 @@
                 <input type="password" name="password_confirmation" class="form-control">
 
                 @error('password_confirmation')
-                    <div class="error">{{ '*' . $message }}</div>
+                    <div class="error" style="font-size:14px;">{{ '*' . $message }}</div>
                 @enderror
             </div>
             <br>
