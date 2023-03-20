@@ -38,7 +38,11 @@ Route::get('/', function (Request $request) {
     $search = $request->input('search') ?? "";
     // return dd($search);
     if ($search != "") {
-        $items = Item::where('item_name','LIKE',"%$search%");
+        $items = collect($items)->where('item_name','LIKE',"%$search%")->where('product_name','LIKE', "%$search%")->where('category_name','LIKE', "%$search%");
+        return dd($items);
+        if($items == null){
+            return view('home')->with(['noItemFound'=>"No Products Found on Your Search"]);
+        }
         // return dd($items);
         // $items = collect($items)->where('item_name','LIKE',$search);
         // return dd($items);
@@ -104,6 +108,21 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/deleteCategory', [ProductController::class, 'deleteCategory']);
     Route::get('/itemsOnCart', [ProductController::class, 'itemsOnCart']);
     Route::get('/moveToStock/{id}',[ProductController::class, 'moveToStock']);
+    Route::get('/addRoles', [ProductController::class, 'addRoles']);
+    Route::post('/storeRoles', [ProductController::class, 'storeRoles']);
+    Route::get('/viewRoles', [ProductController::class, 'viewRoles']);
+    Route::get('/editRole/{id}', [ProductController::class, 'editRole']);
+    Route::patch('/updateRole/{id}', [ProductController::class, 'updateRole']);
+    Route::get('/deleteRole/{id}', [ProductController::class, 'deleteRole']);
+    Route::get('/viewPermissions',[ProductController::class,'viewPermissions']);
+    Route::post('/storePermission',[ProductController::class, 'storePermission']);
+    Route::get('/editPermission/{id}',[ProductController::class, 'editPermission']);
+    Route::patch('/updatePermission/{id}',[ProductController::class, 'updatePermission']);
+    Route::get('/deletePermission/{id}',[ProductController::class,'deletePermission']);
+    Route::get('/assignPermissions',[ProductController::class,'assignPermissions']);
+    Route::post('/storePermissions',[ProductController::class, 'storePermissions']);
+    Route::get('/deleteRolesPermission/{id}',[ProductController::class, 'deleteRolesPermissions']);
+
 });
 
 //order
@@ -164,9 +183,17 @@ Route::patch('updateProfile/{id}', function (Request $request, $id) {
 
 Route::get('test', function () {
 
-    $item = Item::find(2);
+    $roleId = auth()->user()->role_as;
+    $rolesWithPermissions = App\Models\RolesWithPermission::where('roles_id',$roleId)->get()->pluck('permissions_id')->toArray();;
+    // $rolesWithPermissions=$rolesWithPermissions->toArray();
+    // $permissionIds = array();
+    // foreach ($rolesWithPermissions as $item){
+    //     $permissionIds[] = $item->permissions_id;
+    // }
+
+    // $item = Item::find(2);
     // session()->flush();
     // session()->save();
     // return dd(session()->get('cart_items'));
-    return dd($item);
+    return dd($rolesWithPermissions);
 });

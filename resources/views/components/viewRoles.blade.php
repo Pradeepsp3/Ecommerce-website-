@@ -1,19 +1,19 @@
 @extends('master')
-@section('title', 'View Categories')
+@section('title', 'View Roles')
 @section('main-content')
 
     <div class="text-center text-primary">
         <br>
-        <h3>Categories List</h3>
+        <h3>Roles List</h3>
         <br>
     </div>
-    @if ($message = Session::get('categoryUpdated'))
+    @if ($message = Session::get('roleUpdated'))
         <div class="alert alert-success container">
             {{ $message }}
             <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    @if ($message = Session::get('categoryDeleted'))
+    @if ($message = Session::get('roleDeleted'))
         <div class="alert alert-danger container">
             {{ $message }}
             <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -21,7 +21,7 @@
     @endif
     <div class="col-md-8 container">
         <div class="form float-right d-flex justify-content-center">
-            <form action="{{ url('admin/viewCategories') }}" method="GET">
+            <form action="{{ url('admin/viewRoles') }}" method="GET">
                 <div class="input-group">
                     <input type="text" name="search" class="form-control">
                     <input type="submit" value="search" class="btn btn-primary">
@@ -31,17 +31,16 @@
         <table class="table table-bordered text-center align-middle">
             <thead>
                 <th>Id</th>
-                <th>Name</th>
+                <th>Roles</th>
                 <th>Actions</th>
             </thead>
             <tbody>
-                @foreach ($categories as $category)
+                @foreach ($roles as $role)
                     <tr>
-                        <td>{{ $category->id }}</td>
-                        <td>{{ $category->category_name }}</td>
-                        <td><a href="{{ url('admin/editCategory/' . $category->id) }}" @if(in_array('3',$rolesWithPermissions)) class="btn btn-warning editCategory"
-                                id="categoryId"@else class="btn btn-secondary" style="pointer-events: none;" @endif >Edit</a> <a href="{{ url('admin/deleteCategory/' . $category->id) }}"
-                                    @if(in_array('4',$rolesWithPermissions))class="btn btn-danger"@else class="btn btn-secondary" style="pointer-events: none;" @endif>Delete</a>
+                        <td>{{ $role->id }}</td>
+                        <td>{{ $role->roles }}</td>
+                        <td><a href="{{ url('admin/editRole/' . $role->id) }}" class="btn btn-warning editRole"
+                                id="roleId">Edit</a> <a href="{{ url('admin/deleteRole/' . $role->id) }}" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
                 @endforeach

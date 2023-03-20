@@ -11,15 +11,39 @@
     <!-- Copyright -->
   </footer> --}}
   <footer class="container-fluid bg-light text-center text-lg-start" style="bottom:0px;position:fixed;width:100%">
-    <!-- Copyright -->
-    <div class=" p-2 d-flex" style="background-color: #dad4d8">
-    <div class="mx-auto">
-      © 2023 Copyright
-    </div>
-    <div style="margin-left:-20%;padding-right:20%">
-      Made with <span id="heart">&hearts;</span> by&nbsp;&nbsp;<span id="footerName">Pradeep Prasanna</span>
-    </div>
-</div>
-
+      <!-- Copyright -->
+      @if (Auth::check())
+          @if (auth()->user()->role_as != '2')
+              <div class=" p-2 d-flex" style="background-color: #dad4d8">
+                  <div class="mx-auto">
+                      © 2023 Copyright
+                  </div>
+                  <div style="margin-left:-20%;padding-right:20%">
+                      Made with <span id="heart">&hearts;</span> by&nbsp;&nbsp;<span id="footerName">Pradeep
+                          Prasanna</span>
+                  </div>
+              </div>
+          @else
+              <div class=" p-2 d-flex" style="background-color: #dad4d8">
+                  <div class="mx-auto">
+                      © 2023 Copyright
+                  </div>
+                  <div style="">
+                      Made with <span id="heart">&hearts;</span> by&nbsp;&nbsp;<span id="footerName">Pradeep
+                          Prasanna</span>
+                  </div>
+              </div>
+          @endif
+      @else
+          <div class=" d-flex" style="background-color: #dad4d8">
+              <div class="mx-auto">
+                  © 2023 Copyright
+              </div>
+              <div class="" style="float:right;padding-right:3%">
+                  Made with <span id="heart">&hearts;</span> by&nbsp;&nbsp;<span id="footerName">Pradeep
+                      Prasanna</span>
+              </div>
+          </div>
+      @endif
 
   </footer>

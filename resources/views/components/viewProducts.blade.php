@@ -60,8 +60,8 @@
                             @endif
                         @endforeach --}}
                         <td>{{ $product->category_name }}</td>
-                        <td><a href="{{ url('admin/editProduct/'.$product->id) }}" class="btn btn-warning">Edit</a> <a
-                                href="{{ url('admin/deleteProduct/'.$product->id) }}" class="btn btn-danger">Delete</a></td>
+                        <td><a href="{{ url('admin/editProduct/'.$product->id) }}" @if(in_array('7',$rolesWithPermissions))class="btn btn-warning" @else class="btn btn-secondary" style="pointer-events: none;" @endif >Edit</a> <a
+                                href="{{ url('admin/deleteProduct/'.$product->id) }}" @if(in_array('8',$rolesWithPermissions)) class="btn btn-danger" @else class="btn btn-secondary" style="pointer-events: none;" @endif>Delete</a></td>
                     </tr>
                 @endforeach
             </tbody>

@@ -66,6 +66,43 @@ function viewCardsAdded(){
 
 }
 
+// check all product
+    function checkAllProducts(){
+        // var product = document.getElementsByClassName('product');
+        // console.log(product);
+        var allProducts = document.getElementById('allProducts');
+        console.log(allProducts.checked);
+        if(allProducts.checked == 1){
+            $(".product").attr('checked','true');
+
+        }else{
+            $(".product").removeAttr('checked');
+        }
+}
+
+
+// check all categories in permission
+function checkAllCategories(){
+    var allCategories = document.getElementById('allCategories');
+    console.log(allCategories.checked);
+    if(allCategories.checked != 1){
+        $(".category").removeAttr('checked');
+    }else{
+        $(".category").attr('checked','true');
+    }
+}
+
+
+// check all users in permission
+function checkAllUsers(){
+    var allUsers = document.getElementById('allUsers');
+    console.log(allUsers.checked);
+    if(allUsers.checked != 1){
+        $(".user").removeAttr('checked');
+    }else{
+        $(".user").attr('checked','true');
+    }
+}
 
 // //add items to sessions
 // function addItemToSession(id){

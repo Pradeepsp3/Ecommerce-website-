@@ -2,7 +2,7 @@
 <header>
     <div style="display: none;">{{ $categories = App\Models\Category::all() }}</div>
     @if (Auth::check())
-        @if (auth()->user()->role_as == '1')
+        @if (auth()->user()->role_as != '2')
             <!-- Sidebar -->
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -17,6 +17,15 @@
                 <!-- Divider -->
                 <hr class="sidebar-divider my-0">
 
+                <!-- php for roles and permissions -->
+                @php
+                    $roleId = auth()->user()->role_as;
+                    $rolesWithPermissions = App\Models\RolesWithPermission::where('roles_id', $roleId)
+                        ->get()
+                        ->pluck('permissions_id')
+                        ->toArray();
+                @endphp
+
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ url('admin') }}">
@@ -28,6 +37,7 @@
                 <hr class="sidebar-divider">
 
                 <!-- Heading -->
+                @if(in_array(('9'||'10'||'11'||'12'||'13'),$rolesWithPermissions))
                 <div class="sidebar-heading">
                     Users
                 </div>
@@ -42,12 +52,16 @@
                     <div id="collapseUser" class="collapse" aria-labelledby="headingTwo"
                         data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
+                            @if(in_array(('9'),$rolesWithPermissions))
                             <a class="collapse-item" href="{{ url('admin/addUsers') }}">Add Users</a>
+                            @endif
+                            @if(in_array(('10'),$rolesWithPermissions))
                             <a class="collapse-item" href="{{ url('admin/viewUsers') }}">View Users</a>
+                            @endif
                         </div>
                     </div>
                 </li>
-
+                @endif
                 <!-- Divider -->
                 <hr class="sidebar-divider">
 
@@ -57,6 +71,7 @@
                 </div>
 
                 <!-- Nav Item - Pages Collapse Menu -->
+                @if(in_array(('1'||'2'||'3'||'4'),$rolesWithPermissions))
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
                         aria-expanded="true" aria-controls="collapseOne">
@@ -66,34 +81,44 @@
                     <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Categories list:</h6>
+                            @if(in_array(('1'),$rolesWithPermissions))
                             <a class="collapse-item" href="{{ url('admin/addCategories') }}">Add Categories</a>
+                            @endif
+                            @if(in_array(('2'),$rolesWithPermissions))
                             <a class="collapse-item" href="{{ url('admin/viewCategories') }}">View Categories</a>
+                            @endif
                         </div>
                     </div>
                 </li>
-
+                @endif
+                @if(in_array(('5'||'6'||'7'||'8'),$rolesWithPermissions))
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="true" aria-controls="collapseTwo">
+                    <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseProducts"
+                        aria-expanded="true" aria-controls="collapseProducts">
                         <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                         <span>Products</span>
                     </a>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div id="collapseProducts" class="collapse" aria-labelledby="headingTwo"
+                        data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Product list:</h6>
+                            @if(in_array(('5'),$rolesWithPermissions))
                             <a class="collapse-item" href="{{ url('admin/addProducts') }}">Add Products</a>
+                            @endif
+                            @if(in_array(('6'),$rolesWithPermissions))
                             <a class="collapse-item" href="{{ url('admin/viewProducts') }}">View Products</a>
+                            @endif
                         </div>
                     </div>
                 </li>
-
+                @endif
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseThree"
-                        aria-expanded="true" aria-controls="collapseThree">
+                    <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseItems"
+                        aria-expanded="true" aria-controls="collapseItems">
                         <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
                         <span>Items</span>
                     </a>
-                    <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
+                    <div id="collapseItems" class="collapse" aria-labelledby="headingTwo"
                         data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Item list:</h6>
@@ -130,6 +155,60 @@
                     </div>
                 </li>
 
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    Roles
+                </div>
+
+                <!-- Nav Item - Pages Collapse Menu -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseRoles"
+                        aria-expanded="true" aria-controls="collapseRoles">
+                        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                        <span>Roles</span>
+                    </a>
+                    <div id="collapseRoles" class="collapse" aria-labelledby="headingTwo"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            {{-- <h6 class="collapse-header">Roles list:</h6> --}}
+                            <a class="collapse-item" href="{{ url('admin/addRoles') }}">Add Roles</a>
+                            <a class="collapse-item" href="{{ url('admin/viewRoles') }}">View Roles</a>
+                        </div>
+                    </div>
+                </li>
+
+
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    Permissions
+                </div>
+
+                <!-- Nav Item - Pages Collapse Menu -->
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="" data-toggle="collapse"
+                        data-target="#collapsePermissions" aria-expanded="true" aria-controls="collapsePermissions">
+                        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                        <span>Permissions</span>
+                    </a>
+                    <div id="collapsePermissions" class="collapse" aria-labelledby="headingTwo"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            {{-- <h6 class="collapse-header">Roles list:</h6> --}}
+                            <a class="collapse-item" href="{{ url('admin/viewPermissions') }}">Add and View
+                                Permissions</a>
+                            <a class="collapse-item" href="{{ url('admin/assignPermissions') }}">Assign
+                                Permissions</a>
+                        </div>
+                    </div>
+                </li>
             </ul>
             <!-- End of Sidebar -->
 
@@ -148,7 +227,7 @@
                         </button>
 
                         <!-- Topbar Search -->
-                        <form action="{{ url('/') }}"
+                        <form action=""
                             class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                             <div class="input-group">
                                 <input type="text" class="form-control bg-light border-0 small"
@@ -174,7 +253,7 @@
                                 <!-- Dropdown - Messages -->
                                 <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                                     aria-labelledby="searchDropdown">
-                                    <form class="form-inline mr-auto w-100 navbar-search">
+                                    <form action="" class="form-inline mr-auto w-100 navbar-search">
                                         <div class="input-group">
                                             <input type="text" class="form-control bg-light border-0 small"
                                                 placeholder="Search for..." aria-label="Search"
@@ -280,7 +359,8 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     @foreach ($categories as $category)
                                         <li><a class="dropdown-item"
-                                                href="{{ url('category/'.$category->id) }}">{{ $category->category_name }}</a></li>
+                                                href="{{ url('category/' . $category->id) }}">{{ $category->category_name }}</a>
+                                        </li>
                                     @endforeach
                                 </ul>
                             </li>
@@ -300,7 +380,7 @@
                                         aria-hidden="true"></i>Cart({{ $cartCount }})</a>
                             </li>
                         </ul>
-                        <form class="d-flex">
+                        <form action="{{ url('/') }}" class="d-flex">
 
                             <input class="form-control me-2" type="search" placeholder="Search"
                                 aria-label="Search">
@@ -369,7 +449,8 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @foreach ($categories as $category)
-                                    <li><a class="dropdown-item" href="{{ url('category/'.$category->id) }}">{{ $category->category_name }}</a>
+                                    <li><a class="dropdown-item"
+                                            href="{{ url('category/' . $category->id) }}">{{ $category->category_name }}</a>
                                     </li>
                                 @endforeach
                             </ul>
@@ -391,8 +472,8 @@
                             <a class="nav-link text-light" id="cart" href="{{ url('viewCart') }}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart(<span id="cart">0</span>)</a>
                         </li> --}}
                     </ul>
-                    <form action="/" class="d-flex" method="GET">
-                        @csrf
+                    <form action="{{ url('/') }}" class="d-flex" method="GET">
+                        {{-- @csrf --}}
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
                             name="search">
                         <input class="btn btn-outline-light text-light" type="submit" value="Search">

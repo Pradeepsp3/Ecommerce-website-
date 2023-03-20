@@ -28,13 +28,13 @@
 
 </head>
 @if (Auth::check())
-    @if (auth()->user()->role_as == '1')
+    @if (auth()->user()->role_as != '2')
 
-        <body class="container-fluid" style="padding-left:10%;">
+        <body class="container-fluid" style="padding-left:10%;margin-bottom:5%;">
     @endif
 @else
 
-    <body>
+    <body style="margin-bottom:5%;">
 @endif
 {{-- Includes Header --}}
 @include('layouts.header')

@@ -13,6 +13,12 @@
             <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+    @if ($message = Session::get('noItemFound'))
+        <div class="alert alert-danger container">
+            {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     @if ($message = Session::get('orderAdded'))
         <div class="alert alert-success container">
             {{ $message }}

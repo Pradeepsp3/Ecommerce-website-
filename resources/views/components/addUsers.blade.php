@@ -11,7 +11,7 @@
         <form action="{{ url('admin/storeUser') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="align-middle">
-                <label for="name" class="h5">Name</label>
+                <label for="name" class="h5">Name*</label>
                 <input type="text" name="name" class="form-control align-middle" placeholder="Name">
                 @error('name')
                     <div class="text-danger" style="font-size:14px;">{{ '*' . $message }}</div>
@@ -19,7 +19,7 @@
             </div>
             <div class="row my-3">
                 <div class="col col-md-6">
-                    <label for="email" class="h5">Email</label>
+                    <label for="email" class="h5">Email*</label>
                     <input type="text" name="email" class="form-control align-middle" placeholder="email">
                     @error('email')
                         <div class="text-danger" style="font-size:14px;">{{ '*' . $message }}</div>
@@ -34,11 +34,14 @@
                 </div>
             </div>
             <div class="">
-                <label for="role" class="h5 form-label">User Role</label>
+                <label for="role" class="h5 form-label">User Role*</label>
                 <select name="role" id="" class="form-control">
                     <option value="" selected disabled>Select a Role</option>
-                    <option value="0">Customer</option>
-                    <option value="1">Admin</option>
+                    @foreach ($roles as $role)
+                    <option value={{ $role->id }}>{{ $role->roles }}</option>
+                    @endforeach
+                    {{-- <option value="0">Customer</option>
+                    <option value="1">Admin</option> --}}
                 </select>
                 @error('role')
                     <div class="text-danger" style="font-size:14px;">{{ '*' . $message }}</div>
@@ -46,14 +49,14 @@
             </div>
             <div class=" row my-3">
                 <div class=" col col-md-6">
-                    <label for="password" class="h5">Password</label>
+                    <label for="password" class="h5">Password*</label>
                     <input type="password" name="password" class="form-control">
                     @error('password')
                         <div class="text-danger" style="font-size:14px;">{{ '*' . $message }}</div>
                     @enderror
                 </div>
                 <div class=" col col-md-6">
-                    <label for="confirmed" class="h5">Confirm Password</label>
+                    <label for="confirmed" class="h5">Confirm Password*</label>
                     <input type="text" name="password_confirmation" class="form-control">
                     @error('password_confirmation')
                         <div class="text-danger" style="font-size:14px;">{{ '*' . $message }}</div>

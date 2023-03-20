@@ -42,8 +42,8 @@
                         <th>{{ $user->role }}</th>
                         <th>{{ $user->email }}</th>
                         <th>{{ $user->phone }}</th>
-                        <th><a href="{{ url('admin/viewUserDetails/' . $user->id) }}" class="btn btn-info">View</a> <button
-                                onclick="deleteUserWarning({{ $user->id }})" class="btn btn-danger">Delete</button></th>
+                        <th><a href="{{ url('admin/viewUserDetails/' . $user->id) }}" @if(in_array('13',$rolesWithPermissions))class="btn btn-info" @else  class="btn btn-secondary" style="pointer-events: none;" @endif>View</a> <button
+                                onclick="deleteUserWarning({{ $user->id }})" @if(in_array('12',$rolesWithPermissions)) class="btn btn-danger" @else  class="btn btn-secondary" style="pointer-events: none;" @endif>Delete</button></th>
                     </tr>
                 @endforeach
             </tbody>

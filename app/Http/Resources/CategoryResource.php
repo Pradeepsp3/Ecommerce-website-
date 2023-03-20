@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Category;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CategoryResource extends JsonResource
@@ -17,6 +18,7 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'category_name' => $this->category_name,
+            "products" => ProductResource::collection($this->products)
         ];
     }
 }

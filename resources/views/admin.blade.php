@@ -29,6 +29,12 @@
             <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+    @if ($message = Session::get('roleAdd'))
+        <div class="alert alert-success container">
+            {{ $message }}
+            <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <div class="main-content container" style="">
         <div class="header pb-8 pt-5 pt-md-8">
             <div class="container-fluid">
@@ -66,7 +72,7 @@
                                         <div class="row">
                                             <div class="col">
                                                 <h5 class="card-title text-uppercase text-muted mb-0">Customers</h5>
-                                                <span class="h2 font-weight-bold mb-0">{{ $users->where('role_as','=',0)->count() }}</span>
+                                                <span class="h2 font-weight-bold mb-0">{{ $users->where('role_as','=',2)->count() }}</span>
                                             </div>
                                             <div class="col-auto">
                                                 <div class="icon icon-shape rounded-circle shadow">
@@ -111,6 +117,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 

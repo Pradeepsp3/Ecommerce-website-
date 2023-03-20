@@ -44,7 +44,7 @@ body {
     padding: 2%;
     display: flex;
     justify-content: center;
-    color:rgb(27, 129, 9);
+    /* color:rgb(27, 129, 9); */
 }
 
 #footerName{

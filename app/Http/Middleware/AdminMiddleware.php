@@ -18,13 +18,13 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         if(Auth::check()){
-            if(auth()->user()->role_as=="1"){
+            if(auth()->user()->role_as!="2"){
                 return $next($request);
             }else{
-                return redirect('/')->with(['adminerror' => "Only admin users can view admin panel"]);
+                return redirect('/')->with(['adminerror' => "Only Authorized users can view those panel"]);
             }
         }
         // return $next($request);
-        return redirect('/')->with(['adminerror' => "Only admin users can view admin panel"]);
+        return redirect('/')->with(['adminerror' => "Only authorized users can view those panel"]);
     }
 }

@@ -70,7 +70,7 @@ class AuthController extends Controller
 
             Auth::login($user);
 
-            if ($user->role_as == '1') {
+            if ($user->role_as != '2') {
                 return redirect('admin')->with(['user' => $user]);
             } else {
                 if (session()->get('cart_items') == null) {

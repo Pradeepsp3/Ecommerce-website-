@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\Item;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Permission;
 use Illuminate\Http\Request;
+use App\Models\RolesWithPermission;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\ProductController;
 
 class ProductController extends Controller
 {
@@ -199,7 +201,12 @@ class ProductController extends Controller
         }else{
         $data = Category::all();
     }
-        return view('components.viewCategories')->with(['categories'=>$data]);
+    $roleId = auth()->user()->role_as;
+                    $rolesWithPermissions = RolesWithPermission::where('roles_id', $roleId)
+                        ->get()
+                        ->pluck('permissions_id')
+                        ->toArray();
+        return view('components.viewCategories',compact('rolesWithPermissions'))->with(['categories'=>$data]);
     }
 
     // view products
@@ -218,8 +225,13 @@ class ProductController extends Controller
             $product['category_name'] = $category->category_name;
         }
         }
+        $roleId = auth()->user()->role_as;
+                    $rolesWithPermissions = RolesWithPermission::where('roles_id', $roleId)
+                        ->get()
+                        ->pluck('permissions_id')
+                        ->toArray();
         $categories = Category::all();
-        return view('components.viewProducts')->with(['products'=>$products,'categories'=>$categories]);
+        return view('components.viewProducts',compact('rolesWithPermissions'))->with(['products'=>$products,'categories'=>$categories]);
     }
 
     // view items
@@ -329,13 +341,23 @@ class ProductController extends Controller
                 $user['role']= "customer";
             }
         }
-        return view('components.viewUsers')->with(['users'=>$users]);
+        $roleId = auth()->user()->role_as;
+        $rolesWithPermissions = RolesWithPermission::where('roles_id', $roleId)
+            ->get()
+            ->pluck('permissions_id')
+            ->toArray();
+        return view('components.viewUsers',compact('rolesWithPermissions'))->with(['users'=>$users]);
     }
 
     //add Users view page
     public function addUsers(){
-
-        return view('components.addUsers');
+        $roles = Role::all();
+        $roleId = auth()->user()->role_as;
+        $rolesWithPermissions = RolesWithPermission::where('roles_id', $roleId)
+            ->get()
+            ->pluck('permissions_id')
+            ->toArray();
+        return view('components.addUsers',compact('rolesWithPermissions'))->with(['roles'=>$roles]);
     }
 
     //store User
@@ -344,7 +366,6 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users,email',
-            'phone' => 'required',
             'role' => 'required',
             'password' => 'required|confirmed',
         ]);
@@ -418,5 +439,196 @@ class ProductController extends Controller
         return back()->with(['movedToStock'=>"Item: $item->item_name with quantity: $cart->quantity Moved Successfully"]);
     }
 
+    //add roles form page
+    public function addRoles(){
+        return view('components.addRoles');
+    }
+
+    //store role in table
+    public function storeRoles(Request $request){
+
+        $request->validate([
+            'role_name' => 'required',
+        ]);
+
+        $role = new Role();
+        $role->roles = $request->input('role_name');
+        $role->save();
+
+        return redirect('admin')->with(['roleAdd'=>"Role : ".$role->roles." added successfully!"]);
+
+    }
+
+    // view roles
+    public function viewRoles(Request $request){
+        $search = $request->input('search') ?? "";
+        if($search != ""){
+            $roles = Role::where('roles','Like',"%$search%")->get();
+        }else{
+        $roles = Role::all();
+    }
+        return view('components.viewRoles')->with(['roles'=>$roles]);
+    }
+
+    //edit role view page
+    public function editRole($id){
+        $role = Role::find($id);
+        return view('components.editRoles')->with(['role'=>$role]);
+    }
+
+    //update role
+    public function updateRole(Request $request, $id){
+
+        $role = Role::find($id);
+
+        $request->validate([
+            'role_name' => 'required',
+        ]);
+        $role->roles = $request->input('role_name');
+        $role->save();
+
+        return redirect('admin/viewRoles')->with(['roleUpdated'=>"Role : ".$role->roles." Updated successfully!"]);
+
+    }
+
+    //delete role
+    public function deleteRole($id){
+        $role = Role::find($id);
+        $role->delete();
+        return redirect('admin/viewRoles')->with(['roleDeleted'=>"role $role->roles Deleted Successfully!!!"]);
+    }
+
+
+    //view and Add Permission
+    public function viewPermissions(){
+        $permissions = Permission::paginate(10);
+        return view('components.viewPermissions', compact('permissions'));
+    }
+
+    //store Permissions
+    public function storePermission(Request $request){
+
+        $request->validate([
+            'permission' => 'required',
+        ]);
+
+        $permission = new Permission();
+        $permission->permissions = $request->input('permission');
+        $permission->save();
+
+        return redirect()->back()->with(['permissionAdded'=>"permission : ".$permission->permissions." added successfully!"]);
+
+    }
+
+    //edit permission view page
+    public function editPermission($id){
+        $permission = Permission::find($id);
+        return view ('components.editPermission', compact('permission'));
+    }
+
+    //update permission
+    public function updatePermission(Request $request, $id){
+        $permission = Permission::find($id);
+        $permission->permissions = $request->input('permission');
+        $permission->save();
+        return redirect('admin/viewPermissions')->with(['permissionUpdated'=>"permission : ".$permission->permissions." Updated Successfully!"]);
+    }
+
+
+    //delete Permissions
+    public function deletePermissions($id){
+        $permission = Permission::find($id);
+        $permission->delete();
+
+        return redirect('admin/viewPermissions')->with(['permissionDeleted'=>"permission : ".$permission->permissions." deleted successfully!"]);
+    }
+
+    //assign Permissions view Page
+    public function assignPermissions(Request $request){
+
+        if($request->roleId == ""){
+            $roleId = null;
+        }else{
+            $roleId = $request->roleId;
+        }
+        $roles = Role::all();
+        $permissions = Permission::all();
+    //     $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
+    //  ->where("role_has_permissions.role_id",$getRole)
+    //  ->get();
+        // $rolesWithPermissions = RolesWithPermission::where("roles_id","=",$roleId)->get()->toArray();
+        $rolesWithPermissions = Permission::join('roles_with_permissions', 'roles_with_permissions.permissions_id','=','permissions.id')->where("roles_with_permissions.roles_id",$roleId)->get();
+        // return dd($rolesWithPermissions);
+        return view('components.assignPermissions', compact('roles','permissions','rolesWithPermissions','roleId'));
+    }
+
+    //store Permissions
+    public function storePermissions(Request $request){
+
+        $roleId = $request->roleId;
+        RolesWithPermission::where('roles_id',$roleId)->delete();
+        $roles = Role::find($roleId);
+        $roleName = $roles->roles;
+        $permissionIds = array();
+        if($request->addCategory == 1){
+            array_push($permissionIds,"1");
+        }
+        if($request->viewCategory == 2){
+            array_push($permissionIds,"2");
+        }
+        if($request->editCategory == 3){
+            array_push($permissionIds,"3");
+        }
+        if($request->deleteCategory == 4){
+            array_push($permissionIds,"4");
+        }
+        if($request->addProduct == 5){
+            array_push($permissionIds,"5");
+        }
+        if($request->viewProduct == 6){
+            array_push($permissionIds,"6");
+        }
+        if($request->editProduct == 7){
+            array_push($permissionIds,"7");
+        }
+        if($request->deleteProduct == 8){
+            array_push($permissionIds,"8");
+        }
+        if($request->addUser == 9){
+            array_push($permissionIds,"9");
+        }
+        if($request->viewUser == 10){
+            array_push($permissionIds,"10");
+        }
+        if($request->viewUserDetails == 13){
+            array_push($permissionIds,"13");
+        }
+        if($request->editUser == 11){
+            array_push($permissionIds,"11");
+        }
+        if($request->deleteUser == 12){
+            array_push($permissionIds,"12");
+        }
+        // return dd($permissionIds);
+        foreach($permissionIds as $permissionId){
+            $rolesWithPermission = new RolesWithPermission();
+            $rolesWithPermission->roles_id = $roleId;
+            $rolesWithPermission->permissions_id = $permissionId;
+            // return dd($PermissionId);
+            $rolesWithPermission->save();
+        }
+
+        return redirect('admin/assignPermissions')->with(['permissionAssigned'=>"Permissions for $roleName Assigned successfully!"]);
+    }
+
+    //delete roles permission
+    public function deleteRolesPermissions($id){
+
+        RolesWithPermission::where('roles_id',$id)->delete();
+        // return dd($rolesWithPermissions);
+        // $rolesWithPermissions->delete();
+         return redirect('admin/assignPermissions')->with(["deleteAllRolesPermissions"=>"Permissions for this Role are Deleted!!!"]);
+
+    }
 }
 

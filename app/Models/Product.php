@@ -11,13 +11,11 @@ class Product extends Model
 {
     use HasFactory;
 
+    // protected $appends = ['category_name'];
+
     public function categories()
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsTo(Category::class);
     }
 
-    public function items()
-    {
-        return $this->belongsToMany(Item::class);
-    }
 }
